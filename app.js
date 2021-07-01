@@ -1,6 +1,7 @@
 const express= require('express')
 const { ApolloServer } = require('apollo-server-express')
 const { typeDefs, resolvers } = require('./schema/karyawan')
+const http = require('http')
 
 async function startApolloServer() {
   const app = express()
@@ -13,9 +14,13 @@ async function startApolloServer() {
 
   server.applyMiddleware({ app })
 
-  await new Promise(resolve => app.listen({ port: 4000 }, resolve))
+  const httpServer = http.createServer(app)
+  server.installSubscriptionHandlers(httpServer)
+
+  await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve))
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-  return { server, app }
+  console.log(`🚀 Subscription ready at ws://localhost:4000${server.subscriptionsPath}`)
+  return { server, app, httpServer }
 }
 
 startApolloServer()

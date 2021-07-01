@@ -19,9 +19,15 @@ const typeDefs = gql`
     status: String
     createdAt: String
   }
-	# The "Query" type is special: it lists all of the available queries that
-	# clients can execute, along with the return type for each. In this
-	# case, the "books" query returns an array of zero or more Books (defined above).
+
+  type Status {
+    status: String
+  }
+
+  type Subscription {
+    statusUpdated: Status
+  }
+
 	type Query {
 		getAllKaryawan: [Karyawan]
 		findOne(email: String): Karyawan
@@ -39,7 +45,7 @@ const typeDefs = gql`
   type Mutation {
     findOneOrCreate(email: String, password: String): Karyawan
     updateOne(email: String, input: KaryawanInput): Karyawan
-    updateProfile(email: String, name: String, divisi: String): Karyawan
+    updateProfile(email: String, name: String, divisi: String, status:String): Karyawan
     updateStatus(email: String, status: String): Karyawan
   }
 `
@@ -61,7 +67,8 @@ const resolvers = {
       const input = {
         email: args.email,
         name: args.name,
-        divisi: args.divisi
+        divisi: args.divisi,
+        status: args.status
       }
       return EmployeeController.updateProfile(input)
     },

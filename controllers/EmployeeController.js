@@ -32,9 +32,9 @@ class Employee {
   }
 
   static async updateProfile(payload) {
-    const { email, name, divisi } = payload
+    const { email, name, divisi, status } = payload
     try {
-      const successEdit = await Karyawan.update({name, divisi}, {
+      const successEdit = await Karyawan.update({name, divisi, status}, {
         where: {
           email
         },
@@ -67,7 +67,6 @@ class Employee {
   }
 
   static async findHistory(email) {
-    console.log(email, "<")
     try {
       const history = await History.findAll({where: {karyawanEmail: email}})
       if (history) {

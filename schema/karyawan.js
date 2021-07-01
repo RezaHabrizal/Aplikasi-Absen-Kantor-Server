@@ -10,6 +10,7 @@ const typeDefs = gql`
 		email: String
     divisi: String
     status: String
+    updatedAt: String
 	}
 
   type History {
